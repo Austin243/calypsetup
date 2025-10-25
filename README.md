@@ -1,6 +1,6 @@
 # calypsetup
 
-`calypsetup` assembles the boilerplate required to launch CALYPSO + VASP structure searches. I built it so everyone in our lab could queue high-depth runs without spending an evening copy‑pasting POTCARs, hand-editing `input.dat`, or formatting new SLURM scripts. If you maintain your own POTCAR library and CALYPSO/VASP binaries, you can point the tool at them via a simple JSON config and let it lay out consistent calculation folders.
+`calypsetup` assembles the boilerplate required to launch CALYPSO + VASP structure searches. I built it so everyone in our lab could queue high-depth runs without spending an evening copy‑pasting POTCARs, hand-editing `input.dat`, or formatting new SLURM scripts. If you maintain your own POTCAR library and CALYPSO/VASP binaries, you can point the tool at them via a simple JSON config and let it lay out consistent calculation folders. The slurm scripts that are set up are set up to work with our slurm scheduler/partition, but can easily be adjusted in the code to reflect other schedulers/configurations.
 
 Calypso setup script to automate file setup for searches (with lots of config options for 2D searches in particular).
 
@@ -99,6 +99,6 @@ After inspecting/editing the generated files, run CALYPSO/SLURM as usual.
 
 - CALYPSO options beyond the ones we use are still manual (e.g., custom PSO tunables, multi-command workflows).
 - Currently the CLI remains interactive. Converting it to accept explicit command-line values or YAML configuration is on the to-do list.
-- No automatic submission is performed—scripts just get staged.
+- No automatic submission is performed, scripts just get staged. This is intentional on our end, as we often like to double check details on submissions since these searches can often go for a week or longer.
 
 Feel free to file issues or PRs if you add new features or find bugs. Happy structure hunting!
