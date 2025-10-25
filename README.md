@@ -10,7 +10,7 @@ Calypso setup script to automate file setup for searches (with lots of config op
 
 - Collects per-element POTCARs (prefers `_pv`, `_sv`, `_s`) and stitches the RWIGS metadata into a combined file.
 - Writes two INCAR templates, optional 2D CALYPSO blocks, and per-formula subdirectories with `input.dat`.
-- Generates job scripts (`calypso_fullnode.pbs`, `calypso.pbs`, `submit.sh`) using paths from `config.json`.
+- Generates job scripts (`calypso_fullnode.sh`, `calypso.sh`, `submit.sh`) using paths from `config.json`. The SLURM directives reflect our lab’s cluster layout—you may need to tweak queue names, node counts, or scheduler options to match your own system.
 - Supports both bulk and 2D searches (layer count, layer composition, relax‑z) with sensible defaults.
 - Provides a simple CLI (`python -m calypsetup.cli ...`) to prompt for inputs and queue the setup.
 
@@ -85,7 +85,7 @@ setup_calypso(config)
 FeP_run/
 ├── 1/
 │   ├── INCAR_1, INCAR_2, POTCAR, input.dat
-│   ├── calypso.pbs, calypso_fullnode.pbs
+│   ├── calypso.sh, calypso_fullnode.sh
 │   └── submit.sh
 └── 2/
     └── ...
