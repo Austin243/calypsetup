@@ -1,0 +1,5 @@
+{
+  "potcar_root": "/path/to/vasp/potpaw/PAW_PBE",
+  "calypso_executable": "/path/to/CALYPSO_x64/bin/calypso.x",
+  "vasp_executable": "/path/to/vasp_std"
+}
