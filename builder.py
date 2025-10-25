@@ -11,7 +11,7 @@ from typing import Dict, List, Optional, Sequence, Tuple, Union
 
 
 DEFAULT_POTCAR_ROOT = Path(
-    os.environ.get("CALYSETUP_POTCAR_ROOT", "/home/root/vasp-software/pot5.4.4/PAW_PBE")
+    os.environ.get("CALYSETUP_POTCAR_ROOT", "/path/to/vasp/potpaw/PAW_PBE")
 )
 
 
@@ -24,8 +24,8 @@ class SetupConfig:
     formula_multipliers: List[int]
     destination: Path = field(default_factory=lambda: Path.cwd())
     potcar_root: Path = DEFAULT_POTCAR_ROOT
-    calypso_executable: Union[str, Path] = "/home/sammie/CALYPSO_x64/bin/calypso.x"
-    vasp_executable: Union[str, Path] = "/home/opt/vasp/vasp.5.4.4.pl2/bin/vasp_std"
+    calypso_executable: Union[str, Path] = "/path/to/CALYPSO_x64/bin/calypso.x"
+    vasp_executable: Union[str, Path] = "/path/to/vasp_std"
     is_2d: bool = False
     num_layers: int = 1
     relax_z: bool = False
@@ -274,8 +274,7 @@ SIGMA = 0.05
 LREAL = Auto
 LCHARG = .F.
 LWAVE = .F.
-POTIM = 0.02
-PSTRESS = 3000"""
+POTIM = 0.02"""
     incar_2_content = """SYSTEM = opt
 PREC = Accurate
 ENCUT = 400
@@ -292,8 +291,7 @@ SIGMA = 0.05
 LREAL = Auto
 LCHARG = .F.
 LWAVE = .F.
-POTIM = 0.02
-PSTRESS = 3000"""
+POTIM = 0.02"""
 
     create_incar(incar_1_content, destination, "INCAR_1")
     create_incar(incar_2_content, destination, "INCAR_2")
