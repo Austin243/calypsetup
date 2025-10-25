@@ -2,6 +2,8 @@
 
 `calypsetup` assembles the boilerplate required to launch CALYPSO + VASP structure searches. I built it so everyone in our lab could queue high-depth runs without spending an evening copy‑pasting POTCARs, hand-editing `input.dat`, or formatting new SLURM scripts. If you maintain your own POTCAR library and CALYPSO/VASP binaries, you can point the tool at them via a simple JSON config and let it lay out consistent calculation folders.
 
+Calypso setup script to automate file setup for searches (with lots of config options for 2D searches in particular).
+
 > *“I made this so that I along with people in my lab could launch structure searches for a given system with high depth/accuracy, and not have to spend any time manually configuring the CALYPSO input files. You will have to place your own POTCAR, CALYPSO and VASP executables in the config file, but hopefully it can save you some time as well. Not all CALYPSO features are automated, but I focused on the options we use most often for 2D materials, so those paths are much more fleshed out than the others.”*
 
 ---
