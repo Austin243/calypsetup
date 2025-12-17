@@ -27,6 +27,21 @@ def _prompt_int_list(prompt: str, *, expected_len: Optional[int] = None) -> List
         return values
 
 
+def _prompt_float(prompt: str, *, minimum: Optional[float] = None) -> float:
+    while True:
+        raw = input(prompt).strip()
+        try:
+            value = float(raw)
+        except ValueError:
+            print("Please enter a numeric value.")
+            continue
+        if minimum is not None and value < minimum:
+            print(f"Please enter a value greater than or equal to {minimum}.")
+            continue
+        return value
+
+
+
 def _prompt_layer_matrix(num_layers: int, elements: List[str]) -> List[List[int]]:
     layer_matrix: List[List[int]] = []
     for layer_idx in range(1, num_layers + 1):
@@ -46,6 +61,8 @@ def prompt_config(
         f"How many atoms of each species ({', '.join(args.elements)})? ",
         expected_len=len(args.elements),
     )
+
+    pressure_gpa = _prompt_float("Target pressure for PSTRESS (GPa): ", minimum=0.0)
 
     is_2d_resp = input("Is this a 2D structure search? (Y/N): ").strip().lower()
     is_2d = is_2d_resp in {"y", "yes"}
@@ -70,6 +87,7 @@ def prompt_config(
         elements=list(args.elements),
         atom_counts=atom_counts,
         formula_multipliers=formula_multipliers,
+        pressure_gpa=pressure_gpa,
         destination=Path(args.destination).resolve(),
         potcar_root=potcar_root,
         calypso_executable=calypso_executable,

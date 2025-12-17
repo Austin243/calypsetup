@@ -15,6 +15,18 @@ DEFAULT_POTCAR_ROOT = Path(
 )
 
 
+def _format_pstress_kbar(pressure_gpa: float) -> str:
+    """Convert pressure in GPa to kbar for VASP's PSTRESS and return formatted string."""
+    pstress_kbar = pressure_gpa * 10.0
+    if pstress_kbar < 0:
+        raise ValueError("Pressure must be non-negative.")
+    # Prefer integer formatting when possible (e.g., 250 GPa -> 2500 kbar).
+    if abs(pstress_kbar - round(pstress_kbar)) < 1e-9:
+        return str(int(round(pstress_kbar)))
+    return f"{pstress_kbar:.6g}"
+
+
+
 @dataclass
 class SetupConfig:
     """User-specified configuration for generating CALYPSO input directories."""
@@ -22,6 +34,7 @@ class SetupConfig:
     elements: List[str]
     atom_counts: List[int]
     formula_multipliers: List[int]
+    pressure_gpa: float = 0.0  # GPa, converted to kbar for PSTRESS
     destination: Path = field(default_factory=lambda: Path.cwd())
     potcar_root: Path = DEFAULT_POTCAR_ROOT
     calypso_executable: Union[str, Path] = "/path/to/CALYPSO_x64/bin/calypso.x"
@@ -258,7 +271,9 @@ def setup_calypso(config: SetupConfig) -> List[Path]:
         config.elements, destination, potcar_root=config.potcar_root
     )
 
-    incar_1_content = """SYSTEM = opt
+    pstress_kbar_str = _format_pstress_kbar(config.pressure_gpa)
+
+    incar_1_content = f"""SYSTEM = opt
 PREC = Accurate
 ENCUT = 300
 KSPACING = 0.5
@@ -274,8 +289,9 @@ SIGMA = 0.05
 LREAL = Auto
 LCHARG = .F.
 LWAVE = .F.
-POTIM = 0.02"""
-    incar_2_content = """SYSTEM = opt
+POTIM = 0.02
+PSTRESS = {pstress_kbar_str}"""
+    incar_2_content = f"""SYSTEM = opt
 PREC = Accurate
 ENCUT = 400
 KSPACING = 0.25
@@ -291,7 +307,8 @@ SIGMA = 0.05
 LREAL = Auto
 LCHARG = .F.
 LWAVE = .F.
-POTIM = 0.02"""
+POTIM = 0.02
+PSTRESS = {pstress_kbar_str}"""
 
     create_incar(incar_1_content, destination, "INCAR_1")
     create_incar(incar_2_content, destination, "INCAR_2")
