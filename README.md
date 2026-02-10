@@ -1,8 +1,10 @@
-# calypsetup
+# calypso-setup
 
-`calypsetup` assembles the boilerplate required to launch CALYPSO + VASP structure searches. I built it so everyone in our lab could queue high-depth runs without spending an evening copy‑pasting POTCARs, hand-editing `input.dat`, or formatting new SLURM scripts. If you maintain your own POTCAR library and CALYPSO/VASP binaries, you can point the tool at them via a simple JSON config and let it lay out consistent calculation folders. The slurm scripts that are set up are set up to work with our slurm scheduler/partition, but can easily be adjusted in the code to reflect other schedulers/configurations.
+`calypso-setup` assembles the boilerplate required to launch CALYPSO + VASP structure searches. If you maintain your own POTCAR library and CALYPSO/VASP binaries, you can point the tool at them via a simple JSON config and let it lay out consistent calculation folders.
 
 Calypso setup script to automate file setup for searches (with lots of config options for 2D searches in particular).
+
+Note: the Python package/module name remains `calypsetup`, so CLI and import paths still use `calypsetup`.
 
 ---
 
@@ -21,7 +23,7 @@ Calypso setup script to automate file setup for searches (with lots of config op
 
 ```bash
 git clone <repo-url>
-cd calypsetup
+cd calypso-setup
 python -m pip install -e .
 ```
 

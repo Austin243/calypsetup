@@ -1,9 +1,9 @@
 cff-version: 1.2.0
-title: calypsetup
+title: calypso-setup
 message: "If you use this code, please cite this repository."
 type: software
 authors:
   - family-names: Ellis
     given-names: Austin
-repository-code: https://github.com/Austin243/calypsetup
+repository-code: https://github.com/Austin243/calypso-setup
 license: MIT
