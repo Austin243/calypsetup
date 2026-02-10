@@ -1,4 +1,4 @@
-"""Command-line interface for calypsetup."""
+"""Command-line interface for calypso_setup."""
 from __future__ import annotations
 
 import argparse
@@ -117,7 +117,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--config",
         default=None,
-        help=f"Path to config JSON (default: {DEFAULT_CONFIG_PATH.name} next to the module).",
+        help=f"Path to config JSON (default: {DEFAULT_CONFIG_PATH.name} in the project root).",
     )
     parser.add_argument(
         "--potcar-root",

@@ -1,4 +1,4 @@
-"""calypsetup package."""
+"""calypso_setup package."""
 
 from .builder import (
     DEFAULT_POTCAR_ROOT,

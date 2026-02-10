@@ -320,31 +320,26 @@ PSTRESS = {pstress_kbar_str}"""
     calypso_script = "calypso.sh"
 
     calypso_fullnode_content = f"""#!/bin/bash
-#SBATCH --job-name=caly48
-#SBATCH --exclude=node[1-8],gpu[1-2]
-#SBATCH --partition=chem352
+#SBATCH --job-name=calypso-fullnode
+#SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=48          # whole node (48 cores)
-#SBATCH --cpus-per-task=1             # 1 CPU per MPI rank
-#SBATCH --exclusive                   # no other *jobs* on this node
+#SBATCH --ntasks-per-node=48
+#SBATCH --cpus-per-task=1
+#SBATCH --exclusive
 #SBATCH --output=%x_%j.out
 #SBATCH --error=%x_%j.err
 
-# ‑‑‑ safety limits -----------------------------------------------------------
 ulimit -s unlimited
 ulimit -c unlimited
 ulimit -d unlimited
 
-# (optional) record which host(s) we received
 scontrol show hostname "$SLURM_NODELIST" > machinefile
 
-# ‑‑‑ launch CALYPSO driver (single rank, I/O‑bound) --------------------------
 {calypso_exec}   > caly.log 2>&1"""
 
     calypso_content = f"""#!/bin/bash
 #SBATCH --job-name=calypso
-#SBATCH --exclude=node[1-8],gpu[1-2]
-#SBATCH --partition=week-long
+#SBATCH --partition=compute
 #SBATCH -N 1
 #SBATCH -n 24
 #SBATCH --mail-type=end
@@ -356,16 +351,14 @@ ulimit -s unlimited
 ulimit -c unlimited
 ulimit -d unlimited
 
-#sleep 60
-##for CALYPSO6.0
 {calypso_exec}"""
 
     submit_sh_content = f"""#!/bin/bash
-export OMP_NUM_THREADS=1
-export I_MPI_PMI_LIBRARY=/usr/lib64/libpmi2.so   # drop if you switch to PMIx
+set -e
+export OMP_NUM_THREADS=${{OMP_NUM_THREADS:-1}}
 
-srun --exact --mpi=pmi2 --ntasks=16 --cpus-per-task=1 --mem=80G --cpu-bind=cores \\
-        {vasp_exec} > vasp.out  2> vasp.err"""
+srun --ntasks=16 --cpus-per-task=1 \\
+        {vasp_exec} > vasp.out 2> vasp.err"""
 
     create_simple_file(calypso_fullnode_script, calypso_fullnode_content, destination)
     create_simple_file(calypso_script, calypso_content, destination)

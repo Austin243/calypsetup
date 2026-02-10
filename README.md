@@ -4,7 +4,7 @@
 
 Calypso setup script to automate file setup for searches (with lots of config options for 2D searches in particular).
 
-Note: the Python package/module name remains `calypsetup`, so CLI and import paths still use `calypsetup`.
+The Python package/module name is `calypso_setup`, so CLI and import paths use `calypso_setup`.
 
 ---
 
@@ -13,9 +13,9 @@ Note: the Python package/module name remains `calypsetup`, so CLI and import pat
 - Collects per-element POTCARs (prefers `_pv`, `_sv`, `_s`) and stitches the RWIGS metadata into a combined file.
 - Writes two INCAR templates, optional 2D CALYPSO blocks, and per-formula subdirectories with `input.dat`.
 - Prompts for target pressure in GPa and writes `PSTRESS` in kbar into both INCAR templates.
-- Generates job scripts (`calypso_fullnode.sh`, `calypso.sh`, `submit.sh`) using paths from `config.json`. The SLURM directives reflect our lab’s cluster layout—you may need to tweak queue names, node counts, or scheduler options to match your own system.
+- Generates job scripts (`calypso_fullnode.sh`, `calypso.sh`, `submit.sh`) using paths from `config.json`, with scheduler directives that you can adapt to your cluster.
 - Supports both bulk and 2D searches (layer count, layer composition, relax‑z) with sensible defaults.
-- Provides a simple CLI (`python -m calypsetup.cli ...`) to prompt for inputs and queue the setup.
+- Provides a simple CLI (`python -m calypso_setup.cli ...`) to prompt for inputs and queue the setup.
 
 ---
 
@@ -28,6 +28,16 @@ python -m pip install -e .
 ```
 
 Dependencies: `pymatgen` (for POTCAR handling) and the Python standard library. No CALYPSO/VASP binaries are bundled—point to your own installations.
+
+---
+
+## Testing
+
+Run the lightweight regression suite with:
+
+```bash
+python -m pytest
+```
 
 ---
 
@@ -47,24 +57,24 @@ cp config.example.json config.json
 }
 ```
 
-You can keep multiple configs (e.g., Hopper vs. R2 nodes) and select them with `--config /path/to/other.json`. Command-line overrides are available for `--potcar-root`.
+You can keep multiple configs (for different clusters or partitions) and select them with `--config /path/to/other.json`. Command-line overrides are available for `--potcar-root`.
 
 ---
 
 ## Quick Start (Interactive)
 
 ```bash
-python -m calypsetup.cli Fe P --destination ./FeP_run
+python -m calypso_setup.cli Fe P --destination ./FeP_run
 ```
 
 - Enter atom counts and formula multipliers when prompted.
 - Opt into 2D mode to specify layer count/compositions.
 - The tool creates subdirectories named after the formula multipliers (e.g., `1/`, `2/`) with ready-to-run templates.
 
-For non-interactive usage, import `calypsetup` in Python and construct a `SetupConfig` manually:
+For non-interactive usage, import `calypso_setup` in Python and construct a `SetupConfig` manually:
 
 ```python
-from calypsetup import SetupConfig, load_settings, setup_calypso
+from calypso_setup import SetupConfig, load_settings, setup_calypso
 
 settings = load_settings("config.json")
 config = SetupConfig(
@@ -102,6 +112,6 @@ After inspecting/editing the generated files, run CALYPSO/SLURM as usual.
 
 - CALYPSO options beyond the ones we use are still manual (e.g., custom PSO tunables, multi-command workflows).
 - Currently the CLI remains interactive. Converting it to accept explicit command-line values or YAML configuration is on the to-do list.
-- No automatic submission is performed, scripts just get staged. This is intentional on our end, as we often like to double check details on submissions since these searches can often go for a week or longer.
+- No automatic submission is performed, scripts are staged for review before launch.
 
 Feel free to file issues or PRs if you add new features or find bugs. Happy structure hunting!
